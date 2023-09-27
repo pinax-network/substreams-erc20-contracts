@@ -1,0 +1,1 @@
+# substreams-erc20-contract-info
