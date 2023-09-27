@@ -1,0 +1,17 @@
+" ERC-20 Token Contract info "
+type ContractInfo @entity{
+  " ID will be the token address "
+  id: ID!
+
+  " Token address for which the contract info is being tracked"
+  address: String!
+
+  " Token's name"
+  name: String!
+
+  " Token's symbol "
+  symbol: String!
+
+  "Number of decimal of the token"
+  decimals: BigInt!
+}
