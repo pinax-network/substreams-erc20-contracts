@@ -27,7 +27,6 @@ modules:
   # import from https://github.com/streamingfast/substreams-erc20-balance-changes
   - name: map_balance_changes
     kind: map
-    initialBlock: 14000000
     doc: Extracts ERC20 balance changes
     binary: balance_changes
     inputs:
@@ -38,7 +37,6 @@ modules:
   # import from https://github.com/streamingfast/substreams-erc20-balance-changes
   - name: map_valid_balance_changes
     kind: map
-    initialBlock: 14000000
     doc: Extracts ERC20 balance changes
     binary: balance_changes
     inputs:
@@ -49,7 +47,6 @@ modules:
   - name: store_known_contract
     kind: store
     doc: Stores known contracts
-    initialBlock: 14000000
     valueType : string
     updatePolicy : set_if_not_exists
     inputs:
@@ -59,7 +56,6 @@ modules:
 
   - name: map_contract_info
     kind: map
-    initialBlock: 14000000
     doc: Extracts ERC20 token name, symbol and decimals
     inputs:
       - store: store_known_contract
@@ -70,7 +66,6 @@ modules:
   # sink from https://github.com/streamingfast/substreams-sink-entity-changes
   - name: graph_out
     kind: map
-    initialBlock: 14000000
     inputs:
       - map: map_contract_info
     output:
