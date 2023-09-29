@@ -1,8 +1,8 @@
 specVersion: v0.1.0
 package:
-  name: erc20_contract_info
+  name: erc20_contracts
   version: v0.1.0
-  url: https://github.com/pinax-network/substreams-erc20-contract_info
+  url: https://github.com/pinax-network/substreams-erc20-contracts
   doc: ERC-20 Token Contract Info
 
 imports:
@@ -12,14 +12,14 @@ imports:
 binaries:
   default:
     type: wasm/rust-v1
-    file: ./target/wasm32-unknown-unknown/release/erc20_contract_info.wasm
+    file: ./target/wasm32-unknown-unknown/release/erc20_contracts.wasm
   balance_changes:
     type: wasm/rust-v1
     file: ./erc20-balance-changes.wasm
 
 protobuf:
   files:
-    - erc20.contract.proto
+    - erc20.contracts.proto
   importPaths:
     - ./proto/v1
 
@@ -44,21 +44,19 @@ modules:
     output:
       type: proto:erc20.types.v1.ValidBalanceChanges
 
-  - name: store_known_contract
+  - name: store_known_contracts
     kind: store
     doc: Stores known contracts
     valueType : string
     updatePolicy : set_if_not_exists
     inputs:
       - map: map_valid_balance_changes
-      
 
-
-  - name: map_contract_info
+  - name: map_contracts
     kind: map
     doc: Extracts ERC20 token name, symbol and decimals
     inputs:
-      - store: store_known_contract
+      - store: store_known_contracts
         mode: deltas
     output:
       type: proto:erc20.contract.types.v1.Infos
@@ -67,6 +65,6 @@ modules:
   - name: graph_out
     kind: map
     inputs:
-      - map: map_contract_info
+      - map: map_contracts
     output:
       type: proto:sf.substreams.sink.entity.v1.EntityChanges

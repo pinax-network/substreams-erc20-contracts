@@ -1,5 +1,5 @@
-" ERC-20 Token Contract info "
-type ContractInfo @entity{
+" ERC-20 Token Smart Contract details "
+type Contracts @entity{
   " ID will be the token address "
   id: ID!
 

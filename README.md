@@ -1,20 +1,20 @@
-# `ERC-20` Contract info [Substreams](https://substreams.streamingfast.io)
+# `ERC-20` Contracts [Substreams](https://substreams.streamingfast.io)
 
 
-> Extends [ERC-20 Balance Changes](https://github.com/streamingfast/substreams-erc20-balance-changes) with contract info.
+> Extends [ERC-20 Balance Changes](https://github.com/streamingfast/substreams-erc20-balance-changes) with Token Contract information.
 
 ## Quickstart
 
 ```
-$ gh repo clone pinax-network/substreams-erc20-contract-info
-$ cd substreams-erc20-contract-info
+$ gh repo clone pinax-network/substreams-erc20-contracts
+$ cd substreams-erc20-contracts
 $ make
 $ make gui
 ```
 
 ## Releases `.spkg`
 
-- https://github.com/pinax-network/substreams-erc20-contract-info/releases
+- https://github.com/pinax-network/substreams-erc20-contracts/releases
 
 ## References
 - [Ethereum Docs: ERC-20 Token Standard](https://ethereum.org/en/developers/docs/standards/tokens/erc-20/)
@@ -29,16 +29,18 @@ $ make gui
 ```json
 {
   "items": [
-{                                                                                               
-      "address": "dac17f958d2ee523a2206206994597c13d831ec7",            
-      "name":"TetherUSD",                                            "symbol":"USDT",                                                    "decimal":"6"               
-    },                     
+    {
+      "address": "dac17f958d2ee523a2206206994597c13d831ec7",
+      "name": "TetherUSD",
+      "symbol": "USDT",
+      "decimals": 6
+    },
     {
       "address": "6b175474e89094c44da98b954eedeac495271d0f",
-      "name":"DaiStablecoin",
-      "symbol":"DAI",
-      "decimal":"18"
-    },             
+      "name": "DaiStablecoin",
+      "symbol": "DAI",
+      "decimals": 18
+    },
     ...
   ]
 }
@@ -47,47 +49,43 @@ $ make gui
 ### Mermaid graph
 
 ```mermaid
-graph TD
-    A[sf.ethereum.type.v2.Block] --> B(map_balance_changes)
-    B --> C(map_valid_balance_changes)
-    C --> D(store_known_contract)
-    D --> |deltas| E(map_contract_info)
-    E --> F(graph_out)
+graph TD;
+  sf.ethereum.type.v2.Block[source: sf.ethereum.type.v2.Block] --> map_balance_changes;
+  map_balance_changes --> map_valid_balance_changes;
+  store_known_contract[store: store_known_contract];
+  map_valid_balance_changes --> store_known_contract;
+  map_contract_info[map: map_contract_info];
+  store_known_contract -- deltas --> map_contract_info;
+  graph_out[map: graph_out];
+  map_contract_info --> graph_out;
 ```
 
 ### Modules
 
 ```yaml
-package:
-  name: erc20_contract_info
-  version: v0.1.0
-  url: https://github.com/pinax-network/substreams-erc20-contract_info
-  doc: ERC-20 Token Contract Info
+Package name: erc20_contract_info
+Version: v0.1.0
+Doc: ERC-20 Token Contract Info
+Modules:
 ----
-- name: store_known_contract
-    kind: store
-    doc: Stores known contracts
-    initialBlock: 0
-    valueType : string
-    updatePolicy : set_if_not_exists
-    inputs:
-        - map: map_valid_balance_changes
+Name: store_known_contract
+Initial block: 0
+Kind: store
+Value Type: string
+Update Policy: UPDATE_POLICY_SET_IF_NOT_EXISTS
+Hash: b7c1419bf3ea6b80e77dada14df6e21e6d62788c
+Doc: Stores known contracts
 
-  - name: map_contract_info
-    kind: map
-    initialBlock: 0
-    doc: Extracts ERC20 token name, symbol and decimals
-    inputs:
-      - store: store_known_contract
-        mode: deltas
-    output:
-      type: proto:erc20.contract.types.v1.Infos
+Name: map_contract_info
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.contract.types.v1.Infos
+Hash: e8604040f9b9dc4898aa255745eb7d9b1b081187
+Doc: Extracts ERC20 token name, symbol and decimals
 
-  - name: graph_out
-    kind: map
-    initialBlock: 0
-    inputs:
-      - map: map_contract_info
-    output:
-      type: proto:sf.substreams.sink.entity.v1.EntityChanges
+Name: graph_out
+Initial block: 0
+Kind: map
+Output Type: proto:sf.substreams.sink.entity.v1.EntityChanges
+Hash: 6bec7f920834700e2761585e235d60e98e0ac9c2
 ```

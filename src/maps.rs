@@ -1,48 +1,41 @@
 use crate::abi;
-use crate::pb::erc20::contract::types::v1::{Infos, Info};
+use crate::pb::erc20::contracts::types::v1::{Contracts, Contract};
 use substreams::log;
 use substreams::store::{Deltas, DeltaString};
 use substreams::{errors::Error, Hex, scalar::BigInt};
 
 #[substreams::handlers::map]
-pub fn map_contract_info(store: Deltas<DeltaString>) -> Result<Infos, Error> {
-   
-   let mut items: Vec<Info> = Vec::new();
+pub fn map_contracts(store: Deltas<DeltaString>) -> Result<Contracts, Error> {
+   let mut items: Vec<Contract> = Vec::new();
     for delta in store.deltas{
-        let name;
-        let symbol;
-        let decimal;
+        let mut name = "".to_string();
+        let mut symbol = "".to_string();
+        let mut decimals= 18;
 
         match get_contract_name(delta.key.clone()) {
             Some(name_) => {
                 name = name_;
             },
-            None => {
-                name = "Name not found".to_string()
-            },
+            None => {},
         }
 
         match get_contract_symbol(delta.key.clone()) {
             Some(symbol_) => {
                 symbol = symbol_;
             },
-            None => {
-                symbol = "Symbol not found".to_string()
-            },
+            None => {},
         }
 
         match get_contract_decimals(delta.key.clone()) {
             Some(decimal_) => {
-                decimal = decimal_.to_string();
+                decimals = decimal_.into();
             },
-            None => {
-                decimal = "0".to_string()
-            },
+            None => {},
         }
 
-       items.push(Info { address: delta.key, name: name, symbol: symbol, decimal: decimal.to_string() })
+       items.push(Contract { address: delta.key, name, symbol, decimals })
     }
-    Ok(Infos { items })
+    Ok(Contracts { items })
 }
 
 // ETH Call to retrieve ERC20 token Name

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package erc20.contracts.types.v1;
+
+message Contracts {
+  repeated Contract items = 1;
+}
+
+message Contract {
+  string address = 1;
+  string name = 2;
+  string symbol = 3;
+  uint32 decimals = 4;
+}
