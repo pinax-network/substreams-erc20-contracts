@@ -72,20 +72,6 @@ Version: v0.1.0
 Doc: ERC-20 Token Contract Info
 Modules:
 ----
-Name: map_balance_changes
-Initial block: 0
-Kind: map
-Output Type: proto:erc20.types.v1.BalanceChanges
-Hash: 5b0bcc0bd04653f0b398b3e34fb4cf9fcb8ef148
-Doc: Extracts ERC20 balance changes
-
-Name: map_valid_balance_changes
-Initial block: 0
-Kind: map
-Output Type: proto:erc20.types.v1.ValidBalanceChanges
-Hash: 68b78a7f5b8c554468a236191c33fdf8dedc3810
-Doc: Extracts ERC20 balance changes
-
 Name: store_known_contracts
 Initial block: 0
 Kind: store
