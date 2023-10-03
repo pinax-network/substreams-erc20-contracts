@@ -50,42 +50,128 @@ $ make gui
 
 ```mermaid
 graph TD;
+  map_balance_changes[map: map_balance_changes];
   sf.ethereum.type.v2.Block[source: sf.ethereum.type.v2.Block] --> map_balance_changes;
+  map_valid_balance_changes[map: map_valid_balance_changes];
   map_balance_changes --> map_valid_balance_changes;
-  store_known_contract[store: store_known_contract];
-  map_valid_balance_changes --> store_known_contract;
-  map_contract_info[map: map_contract_info];
-  store_known_contract -- deltas --> map_contract_info;
+  store_known_contracts[store: store_known_contracts];
+  map_valid_balance_changes --> store_known_contracts;
+  map_contracts[map: map_contracts];
+  store_known_contracts -- deltas --> map_contracts;
   graph_out[map: graph_out];
-  map_contract_info --> graph_out;
+  map_contracts --> graph_out;
+  db_out[map: db_out];
+  map_contracts --> db_out;
+  balance_changes:map_balance_changes[map: balance_changes:map_balance_changes];
+  sf.ethereum.type.v2.Block[source: sf.ethereum.type.v2.Block] --> balance_changes:map_balance_changes;
+  balance_changes:map_valid_balance_changes[map: balance_changes:map_valid_balance_changes];
+  balance_changes:map_balance_changes --> balance_changes:map_valid_balance_changes;
+  balance_changes:map_unknown_balance_changes[map: balance_changes:map_unknown_balance_changes];
+  balance_changes:map_balance_changes --> balance_changes:map_unknown_balance_changes;
+  balance_changes:db_out[map: balance_changes:db_out];
+  sf.substreams.v1.Clock[source: sf.substreams.v1.Clock] --> balance_changes:db_out;
+  balance_changes:map_balance_changes --> balance_changes:db_out;
+  balance_changes:graph_out[map: balance_changes:graph_out];
+  sf.substreams.v1.Clock[source: sf.substreams.v1.Clock] --> balance_changes:graph_out;
+  balance_changes:map_balance_changes --> balance_changes:graph_out;
+  balance_changes:store_valid_balance_changes[store: balance_changes:store_valid_balance_changes];
+  balance_changes:map_balance_changes --> balance_changes:store_valid_balance_changes;
+  balance_changes:balance_change_stats[map: balance_changes:balance_change_stats];
+  sf.substreams.v1.Clock[source: sf.substreams.v1.Clock] --> balance_changes:balance_change_stats;
+  balance_changes:store_valid_balance_changes --> balance_changes:balance_change_stats;
 ```
 
 ### Modules
 
 ```yaml
-Package name: erc20_contract_info
+Package name: erc20_contracts
 Version: v0.1.0
 Doc: ERC-20 Token Contract Info
 Modules:
 ----
-Name: store_known_contract
+Name: map_balance_changes
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.types.v1.BalanceChanges
+Hash: 5b0bcc0bd04653f0b398b3e34fb4cf9fcb8ef148
+Doc: Extracts ERC20 balance changes
+
+Name: map_valid_balance_changes
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.types.v1.ValidBalanceChanges
+Hash: 68b78a7f5b8c554468a236191c33fdf8dedc3810
+Doc: Extracts ERC20 balance changes
+
+Name: store_known_contracts
 Initial block: 0
 Kind: store
 Value Type: string
 Update Policy: UPDATE_POLICY_SET_IF_NOT_EXISTS
-Hash: b7c1419bf3ea6b80e77dada14df6e21e6d62788c
+Hash: 82f03b5fd3efbdbc65c7e5d45798405f33257815
 Doc: Stores known contracts
 
-Name: map_contract_info
+Name: map_contracts
 Initial block: 0
 Kind: map
-Output Type: proto:erc20.contract.types.v1.Infos
-Hash: e8604040f9b9dc4898aa255745eb7d9b1b081187
+Output Type: proto:erc20.contracts.types.v1.Contracts
+Hash: 5db9c17c07f9c77340123d40265899b957d69266
 Doc: Extracts ERC20 token name, symbol and decimals
 
 Name: graph_out
 Initial block: 0
 Kind: map
 Output Type: proto:sf.substreams.sink.entity.v1.EntityChanges
-Hash: 6bec7f920834700e2761585e235d60e98e0ac9c2
+Hash: f6b5404eddf524d3fb0de22ada75aae3959b33d5
+
+Name: db_out
+Initial block: 0
+Kind: map
+Output Type: proto:sf.substreams.database.v1.DatabaseChanges
+Hash: 53b65c3f5f14d17f41dd0e0f5d0defa17d1c07a6
+
+Name: balance_changes:map_balance_changes
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.types.v1.BalanceChanges
+Hash: 72c5e86a57ac3dc893e7f8433e87d39dc24d059f
+Doc: Extracts ERC20 balance changes
+
+Name: balance_changes:map_valid_balance_changes
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.types.v1.ValidBalanceChanges
+Hash: 7e7d1e2e18bf0f240faa936a3cd4ddf197c53340
+Doc: Extracts ERC20 balance changes
+
+Name: balance_changes:map_unknown_balance_changes
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.types.v1.UnknownBalanceChanges
+Hash: 05062a84a99f182d1c1e0291e24822e6bee02568
+
+Name: balance_changes:db_out
+Initial block: 0
+Kind: map
+Output Type: proto:sf.substreams.sink.database.v1.DatabaseChanges
+Hash: d5c55f368e0c79b3b6ec118b4a4963763bd73f5c
+
+Name: balance_changes:graph_out
+Initial block: 0
+Kind: map
+Output Type: proto:sf.substreams.sink.entity.v1.EntityChanges
+Hash: 1e05e3878640cd243d4783808982300b2d87a4b9
+
+Name: balance_changes:store_valid_balance_changes
+Initial block: 0
+Kind: store
+Value Type: bigint
+Update Policy: UPDATE_POLICY_ADD
+Hash: b054d3dc657fbee6ea68687d980b13161f85f97b
+
+Name: balance_changes:balance_change_stats
+Initial block: 0
+Kind: map
+Output Type: proto:erc20.types.v1.BalanceChangeStats
+Hash: e74b51058508548b72e606076b7e8a847ddefe6d
 ```
