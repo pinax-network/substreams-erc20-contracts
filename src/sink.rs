@@ -11,12 +11,21 @@ pub fn graph_out(contracts: Contracts)  -> Result<EntityChanges, Error> {
     let mut tables = Tables::new();
     for event in contracts.items {
         let address = &event.address;
-        tables
+        let row = tables
             .create_row("Contracts", address)
-            .set("address", address)
-            .set("name", &event.name)
-            .set("symbol", &event.symbol)
-            .set_bigint("decimals", &event.decimals.to_string());
+            .set("address", address);
+
+        if !event.name.is_empty() {
+            row.set("name", &event.name);
+        }
+            
+        if !event.name.is_empty() {
+            row.set("symbol", &event.symbol);
+        }
+
+        if !event.decimals == 0 {
+            row .set_bigint("decimals", &event.decimals.to_string());
+        }  
     }
     Ok(tables.to_entity_changes())
 }

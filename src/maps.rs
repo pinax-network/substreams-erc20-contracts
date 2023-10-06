@@ -10,8 +10,8 @@ pub fn map_contracts(store: Deltas<DeltaString>) -> Result<Contracts, Error> {
     for delta in store.deltas{
         let mut name = "".to_string();
         let mut symbol = "".to_string();
-        let mut decimals= 18;
-
+        let mut decimals= 0;
+        
         match get_contract_name(delta.key.clone()) {
             Some(name_) => {
                 name = name_;
@@ -33,7 +33,7 @@ pub fn map_contracts(store: Deltas<DeltaString>) -> Result<Contracts, Error> {
             None => {},
         }
 
-       items.push(Contract { address: delta.key, name, symbol, decimals })
+            items.push(Contract { address: delta.key, name, symbol, decimals })
     }
     Ok(Contracts { items })
 }

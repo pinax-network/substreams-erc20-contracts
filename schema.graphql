@@ -7,11 +7,11 @@ type Contracts @entity{
   address: String!
 
   " Token's name"
-  name: String!
+  name: String
 
   " Token's symbol "
-  symbol: String!
+  symbol: String
 
   "Number of decimal of the token"
-  decimals: BigInt!
+  decimals: BigInt
 }
