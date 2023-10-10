@@ -1,6 +1,6 @@
 create table contracts
 (
-    id          text not null constraint supply_pk primary key,
+    id          text not null constraint contract_pk primary key,
     address     text,
     name        text,
     symbol      text,
