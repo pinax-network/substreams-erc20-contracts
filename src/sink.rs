@@ -23,7 +23,7 @@ pub fn graph_out(contracts: Contracts)  -> Result<EntityChanges, Error> {
             row.set("symbol", &event.symbol);
         }
 
-        if !event.decimals == 0 {
+        if  event.decimals != 0 {
             row .set_bigint("decimals", &event.decimals.to_string());
         }  
     }
