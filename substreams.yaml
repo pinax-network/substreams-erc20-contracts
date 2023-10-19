@@ -48,8 +48,8 @@ modules:
   - name: store_known_contracts
     kind: store
     doc: Stores known contracts
-    valueType : string
-    updatePolicy : set_if_not_exists
+    valueType: string
+    updatePolicy: set_if_not_exists
     inputs:
       - map: map_valid_balance_changes
 
@@ -60,7 +60,7 @@ modules:
       - store: store_known_contracts
         mode: deltas
     output:
-      type: proto:erc20.contracts.types.v1.Contracts  
+      type: proto:erc20.contracts.types.v1.Contracts
 
   # sink from https://github.com/streamingfast/substreams-sink-entity-changes
   - name: graph_out
@@ -69,19 +69,18 @@ modules:
       - map: map_contracts
     output:
       type: proto:sf.substreams.sink.entity.v1.EntityChanges
+#  - name: db_out
+#    kind: map
+#    inputs:
+#      - map: map_contracts
+#    output:
+#      type: proto:sf.substreams.sink.database.v1.DatabaseChanges
 
-  - name: db_out
-    kind: map
-    inputs:
-      - map: map_contracts
-    output:
-      type: proto:sf.substreams.sink.database.v1.DatabaseChanges
+#network: mainnet
 
-network: mainnet
-
-sink:
-  module: db_out
-  type: sf.substreams.sink.sql.v1.Service
-  config:
-    schema: "./schema.sql"
-    wire_protocol_access: true
+#sink:
+#  module: db_out
+#  type: sf.substreams.sink.sql.v1.Service
+#  config:
+#    schema: "./schema.sql"
+#    wire_protocol_access: true

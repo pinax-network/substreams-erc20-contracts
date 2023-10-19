@@ -30,7 +30,7 @@ pub fn graph_out(contracts: Contracts)  -> Result<EntityChanges, Error> {
     Ok(tables.to_entity_changes())
 }
 
-#[substreams::handlers::map]
+/*#[substreams::handlers::map]
 pub fn db_out(contracts: Contracts) -> Result<DatabaseChanges, Error> {
 
     let mut database_changes: DatabaseChanges = Default::default();
@@ -46,6 +46,6 @@ pub fn db_out(contracts: Contracts) -> Result<DatabaseChanges, Error> {
         .change("decimals", (None, event.decimals));
     }
     Ok(database_changes)
-}
+}*/
 
 
