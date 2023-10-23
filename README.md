@@ -2,7 +2,13 @@
 
 
 > Extends [ERC-20 Balance Changes](https://github.com/streamingfast/substreams-erc20-balance-changes) with Token Contract information.
-
+> 
+### First block containing ERC20 Transfers
+| Chain                                                                                           | Block number                                            |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| ETH                                                                                             | 913 198                                                 |
+| Polygon                                                                                         | 2764                                                    |
+| BSC                                                                                             | 64 253                                                  |
 ## Quickstart
 
 ```
