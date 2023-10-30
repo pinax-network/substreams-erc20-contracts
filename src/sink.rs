@@ -2,7 +2,6 @@
 use substreams::errors::Error;
 use substreams_entity_change::tables::Tables;
 use substreams_entity_change::pb::entity::EntityChanges;
-use substreams_database_change::pb::database::{table_change::Operation, DatabaseChanges};
 
 use crate::pb::erc20::contracts::types::v1::Contracts;
 
@@ -24,7 +23,7 @@ pub fn graph_out(contracts: Contracts)  -> Result<EntityChanges, Error> {
         }
 
         if  event.decimals != 0 {
-            row .set_bigint("decimals", &event.decimals.to_string());
+            row.set("decimals", event.decimals);
         }  
     }
     Ok(tables.to_entity_changes())

@@ -28,9 +28,17 @@ pub fn map_contracts(store: Deltas<DeltaString>) -> Result<Contracts, Error> {
 
         match get_contract_decimals(delta.key.clone()) {
             Some(decimal_) => {
-                decimals = decimal_.into();
-            },
-            None => {},
+                let result: i32  =  decimal_.to_u64() as i32;
+                if result < 0 {
+                    log::info!("Invalid decimals value: {:?}", result);
+                    break;
+                }
+                else {
+                    decimals = result;
+                }
+            }
+            None => {}
+   
         }
 
             items.push(Contract { address: delta.key, name, symbol, decimals })
@@ -59,6 +67,7 @@ pub fn get_contract_decimals(address: String) -> Option<BigInt> {
     let call = abi::erc20::functions::Decimals{};
     log::info!("get_contract_decimals: {:?}", address);
     let hex: Vec<u8> = Hex::decode(address).unwrap();
+    log::info!("before call decimals:");
     call.call(hex)
 }
 

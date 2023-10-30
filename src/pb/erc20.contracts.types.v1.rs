@@ -14,7 +14,7 @@ pub struct Contract {
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
     pub symbol: ::prost::alloc::string::String,
-    #[prost(uint32, tag="4")]
-    pub decimals: u32,
+    #[prost(int32, tag="4")]
+    pub decimals: i32,
 }
 // @@protoc_insertion_point(module)
