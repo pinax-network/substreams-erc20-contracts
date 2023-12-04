@@ -8,4 +8,8 @@ CREATE TABLE IF NOT EXISTS Contracts  (
     decimals Nullable(UInt64)
 )
 ENGINE = MergeTree()
-ORDER BY (address)
+ORDER BY (address, timestamp, block_number, chain);
+
+-- Indexes for block_number and chain --
+ALTER TABLE Contracts ADD INDEX Contracts_block_number_index block_number TYPE minmax;
+ALTER TABLE Contracts ADD INDEX Contracts_chain_index chain TYPE minmax;
