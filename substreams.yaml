@@ -8,15 +8,11 @@ package:
 imports:
   entities: https://github.com/streamingfast/substreams-sink-entity-changes/releases/download/v1.3.0/substreams-sink-entity-changes-v1.3.0.spkg
   balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/0.0.5/erc20-balance-changes-v0.0.5.spkg
-  sql: https://github.com/streamingfast/substreams-sink-sql/releases/download/protodefs-v1.0.2/substreams-sink-sql-protodefs-v1.0.2.spkg
 
 binaries:
   default:
     type: wasm/rust-v1
     file: ./target/wasm32-unknown-unknown/release/erc20_contracts.wasm
-  balance_changes:
-    type: wasm/rust-v1
-    file: ./erc20-balance-changes.wasm
 
 protobuf:
   files:
@@ -25,33 +21,13 @@ protobuf:
     - ./proto/v1
 
 modules:
-  # import from https://github.com/streamingfast/substreams-erc20-balance-changes
-  - name: map_balance_changes
-    kind: map
-    doc: Extracts ERC20 balance changes
-    binary: balance_changes
-    inputs:
-      - source: sf.ethereum.type.v2.Block
-    output:
-      type: proto:erc20.types.v1.BalanceChanges
-
-  # import from https://github.com/streamingfast/substreams-erc20-balance-changes
-  - name: map_valid_balance_changes
-    kind: map
-    doc: Extracts ERC20 balance changes
-    binary: balance_changes
-    inputs:
-      - map: map_balance_changes
-    output:
-      type: proto:erc20.types.v1.ValidBalanceChanges
-
   - name: store_known_contracts
     kind: store
     doc: Stores known contracts
     valueType: string
     updatePolicy: set_if_not_exists
     inputs:
-      - map: map_valid_balance_changes
+      - map: balance_changes:map_valid_balance_changes
 
   - name: map_contracts
     kind: map
@@ -69,18 +45,3 @@ modules:
       - map: map_contracts
     output:
       type: proto:sf.substreams.sink.entity.v1.EntityChanges
-#  - name: db_out
-#    kind: map
-#    inputs:
-#      - map: map_contracts
-#    output:
-#      type: proto:sf.substreams.sink.database.v1.DatabaseChanges
-
-#network: mainnet
-
-#sink:
-#  module: db_out
-#  type: sf.substreams.sink.sql.v1.Service
-#  config:
-#    schema: "./schema.sql"
-#    wire_protocol_access: true
