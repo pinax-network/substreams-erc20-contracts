@@ -7,8 +7,9 @@ package:
 
 imports:
   entities: https://github.com/streamingfast/substreams-sink-entity-changes/releases/download/v1.3.0/substreams-sink-entity-changes-v1.3.0.spkg
-  balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/0.0.5/erc20-balance-changes-v0.0.5.spkg
-
+  balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/v1.2.0/erc20-balance-changes-mainnet-v1.2.0.spkg
+  sql: https://github.com/streamingfast/substreams-sink-sql/releases/download/protodefs-v1.0.7/substreams-sink-sql-protodefs-v1.0.7.spkg
+  database_change: https://github.com/streamingfast/substreams-sink-database-changes/releases/download/v1.3.1/substreams-database-change-v1.3.1.spkg
 binaries:
   default:
     type: wasm/rust-v1
@@ -21,7 +22,7 @@ protobuf:
     - ./proto/v1
 
 modules:
-  - name: store_known_contracts
+  - name: store_known_contract
     kind: store
     doc: Stores known contracts
     valueType: string
@@ -33,7 +34,7 @@ modules:
     kind: map
     doc: Extracts ERC20 token name, symbol and decimals
     inputs:
-      - store: store_known_contracts
+      - store: store_known_contract
         mode: deltas
     output:
       type: proto:erc20.contracts.types.v1.Contracts
@@ -42,6 +43,25 @@ modules:
   - name: graph_out
     kind: map
     inputs:
+      - source: sf.substreams.v1.Clock
       - map: map_contracts
     output:
       type: proto:sf.substreams.sink.entity.v1.EntityChanges
+
+  - name: db_out
+    kind: map
+    inputs:
+      - source: sf.substreams.v1.Clock
+      - map: map_contracts
+    output:
+      type: proto:sf.substreams.sink.database.v1.DatabaseChanges
+network: mainnet
+
+sink:
+  module: db_out
+  type: sf.substreams.sink.sql.v1.Service
+  config:
+    schema: "./schema.sql"
+    engine: clickhouse
+    postgraphile_frontend:
+      enabled: false
