@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS Contracts  (
     address FixedString(40),
-    name Nullable(String),
-    symbol Nullable(String),
-    decimals Nullable(UInt64),
+    name String,
+    symbol String,
+    decimals UInt64,
     block_number    UInt32(),
     timestamp       DateTime64(3, 'UTC'),
 )

@@ -27,8 +27,8 @@ info:
 
 .PHONY: run
 run:
-	substreams run graph_out -e eth.substreams.pinax.network:443 -s 1000000
+	substreams run db_out -e eth.substreams.pinax.network:443 -s 913198 --stop-block 915005
 
 .PHONY: gui
 gui:
-	substreams gui graph_out -e eth.substreams.pinax.network:443 -s 1000000
+	substreams gui db_out -e eth.substreams.pinax.network:443 -s 913198 --stop-block 915005

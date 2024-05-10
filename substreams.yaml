@@ -22,7 +22,7 @@ protobuf:
     - ./proto/v1
 
 modules:
-  - name: store_known_contract
+  - name: store_known_contracts
     kind: store
     doc: Stores known contracts
     valueType: string
@@ -34,7 +34,7 @@ modules:
     kind: map
     doc: Extracts ERC20 token name, symbol and decimals
     inputs:
-      - store: store_known_contract
+      - store: store_known_contracts
         mode: deltas
     output:
       type: proto:erc20.contracts.types.v1.Contracts
@@ -55,6 +55,7 @@ modules:
       - map: map_contracts
     output:
       type: proto:sf.substreams.sink.database.v1.DatabaseChanges
+
 network: mainnet
 
 sink:

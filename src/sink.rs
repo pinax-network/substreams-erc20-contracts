@@ -4,7 +4,6 @@ use substreams_entity_change::tables::Tables;
 use substreams_entity_change::pb::entity::EntityChanges;
 use substreams_database_change::pb::database::{DatabaseChanges, table_change::Operation};
 use substreams::pb::substreams::Clock;
-
 use crate::pb::erc20::contracts::types::v1::Contracts;
 
 
@@ -26,7 +25,7 @@ pub fn graph_out(clock: Clock,contracts: Contracts)  -> Result<EntityChanges, Er
             row.set("name", &event.name);
         }
             
-        if !event.name.is_empty() {
+        if !event.symbol.is_empty() {
             row.set("symbol", &event.symbol);
         }
 
@@ -54,14 +53,33 @@ fn db_out(clock: Clock, contracts: Contracts) -> Result<DatabaseChanges, Error> 
     for event in contracts.items {
         let address = &event.address;
     // Create row 
-    database_changes.push_change("Contracts", address, 0, Operation::Create)
-        .change("name", (None, event.name))
-        .change("symbol", (None, event.symbol))
-        .change("decimals", (None, event.decimals))
-        .change("block_number", (None,block.clone() ))
-        .change("timestamp", (None, timestamp.clone()));
+    let row = database_changes.push_change("Contracts", address, 0, Operation::Create);
+    if !event.name.is_empty() {
+        row.change("name", (None, event.name));
+    }
+    else {
+        row.change("name", (None, ""));
     }
 
+    if !event.symbol.is_empty() {
+        row.change("symbol", (None, event.symbol));
+    }
+    else {
+        row.change("symbol", (None, ""));
+    }
+
+    if  event.decimals != 0 {
+        row.change("decimals", (None, event.decimals));
+    }
+    else {
+        row.change("decimals", (None, 0));
+    
+    }
+        row.change("block_number", (None,block.clone()));
+        row.change("timestamp", (None, timestamp.clone()));
+    }
+
+    
     Ok(database_changes)
 }
 
