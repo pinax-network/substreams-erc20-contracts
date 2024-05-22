@@ -1,7 +1,7 @@
 specVersion: v0.1.0
 package:
   name: erc20_contracts
-  version: v0.1.3
+  version: v0.1.4
   url: https://github.com/pinax-network/substreams-erc20-contracts
   doc: ERC-20 Token Contract Info
 
