@@ -10,6 +10,7 @@ imports:
   balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/v1.2.0/erc20-balance-changes-mainnet-v1.2.0.spkg
   sql: https://github.com/streamingfast/substreams-sink-sql/releases/download/protodefs-v1.0.7/substreams-sink-sql-protodefs-v1.0.7.spkg
   database_change: https://github.com/streamingfast/substreams-sink-database-changes/releases/download/v1.3.1/substreams-database-change-v1.3.1.spkg
+
 binaries:
   default:
     type: wasm/rust-v1
@@ -30,12 +31,25 @@ modules:
     inputs:
       - map: balance_changes:map_valid_balance_changes
 
+  - name: index_contracts
+    kind: blockIndex
+    inputs:
+      - store: store_known_contracts
+        mode: deltas
+    output:
+      type: proto:sf.substreams.index.v1.Keys
+
   - name: map_contracts
     kind: map
     doc: Extracts ERC20 token name, symbol and decimals
     inputs:
       - store: store_known_contracts
         mode: deltas
+    blockFilter:
+      module: index_contracts
+      query:
+        string: contracts
+        params: false
     output:
       type: proto:erc20.contracts.types.v1.Contracts
 
