@@ -1,12 +1,11 @@
 specVersion: v0.1.0
 package:
   name: erc20_contracts
-  version: v0.1.5
+  version: v0.1.6
   url: https://github.com/pinax-network/substreams-erc20-contracts
   doc: ERC-20 Token Contract Info
 
 imports:
-  entities: https://github.com/streamingfast/substreams-sink-entity-changes/releases/download/v1.3.0/substreams-sink-entity-changes-v1.3.0.spkg
   balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/v1.2.0/erc20-balance-changes-mainnet-v1.2.0.spkg
   sql: https://github.com/streamingfast/substreams-sink-sql/releases/download/protodefs-v1.0.7/substreams-sink-sql-protodefs-v1.0.7.spkg
   database_change: https://github.com/streamingfast/substreams-sink-database-changes/releases/download/v1.3.1/substreams-database-change-v1.3.1.spkg
@@ -52,15 +51,6 @@ modules:
         params: false
     output:
       type: proto:erc20.contracts.types.v1.Contracts
-
-  # sink from https://github.com/streamingfast/substreams-sink-entity-changes
-  - name: graph_out
-    kind: map
-    inputs:
-      - source: sf.substreams.v1.Clock
-      - map: map_contracts
-    output:
-      type: proto:sf.substreams.sink.entity.v1.EntityChanges
 
   - name: db_out
     kind: map
