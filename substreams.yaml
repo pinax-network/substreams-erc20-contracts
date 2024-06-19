@@ -30,13 +30,13 @@ modules:
     inputs:
       - map: balance_changes:map_valid_balance_changes
 
-  - name: index_contracts
-    kind: blockIndex
-    inputs:
-      - store: store_known_contracts
-        mode: deltas
-    output:
-      type: proto:sf.substreams.index.v1.Keys
+  # - name: index_contracts
+  #   kind: blockIndex
+  #   inputs:
+  #     - store: store_known_contracts
+  #       mode: deltas
+  #   output:
+  #     type: proto:sf.substreams.index.v1.Keys
 
   - name: map_contracts
     kind: map
@@ -44,11 +44,11 @@ modules:
     inputs:
       - store: store_known_contracts
         mode: deltas
-    blockFilter:
-      module: index_contracts
-      query:
-        string: contracts
-        params: false
+    #  blockFilter:
+    #    module: index_contracts
+    #    query:
+    #      string: contracts
+    #      params: false
     output:
       type: proto:erc20.contracts.types.v1.Contracts
 

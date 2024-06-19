@@ -3,9 +3,9 @@ use crate::pb::erc20::contracts::types::v1::{Contracts, Contract};
 use substreams::log;
 use substreams::store::{Deltas, DeltaString};
 use substreams::{errors::Error, Hex, scalar::BigInt};
-use substreams::pb::sf::substreams::index::v1::Keys;
+//use substreams::pb::sf::substreams::index::v1::Keys;
 
-#[substreams::handlers::map]
+/*#[substreams::handlers::map]
 fn index_contracts(store: Deltas<DeltaString>) -> Result<Keys, Error> {
     Ok(match store.deltas.is_empty() {
         true => Keys::default(),
@@ -13,7 +13,7 @@ fn index_contracts(store: Deltas<DeltaString>) -> Result<Keys, Error> {
             keys: vec!["contracts".to_string()]
         },
     })
-}
+}*/
 
 
 
