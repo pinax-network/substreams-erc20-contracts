@@ -6,7 +6,7 @@ package:
   doc: ERC-20 Token Contract Info
 
 imports:
-  balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/v1.2.2/erc20-balance-changes-v1.2.2.spkg
+  balance_changes: https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/v1.3/erc20-balance-changes-v1.3.spkg
   sql: https://github.com/streamingfast/substreams-sink-sql/releases/download/protodefs-v1.0.7/substreams-sink-sql-protodefs-v1.0.7.spkg
   database_change: https://github.com/streamingfast/substreams-sink-database-changes/releases/download/v1.3.1/substreams-database-change-v1.3.1.spkg
 
