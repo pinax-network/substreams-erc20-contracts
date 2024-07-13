@@ -1,7 +1,7 @@
 specVersion: v0.1.0
 package:
   name: erc20_contracts
-  version: v0.1.6
+  version: v0.1.7
   url: https://github.com/pinax-network/substreams-erc20-contracts
   doc: ERC-20 Token Contract Info
 
@@ -28,7 +28,7 @@ modules:
     valueType: string
     updatePolicy: set_if_not_exists
     inputs:
-      - map: balance_changes:balance_changes:map_valid_balance_changes
+      - map: balance_changes:map_valid_balance_changes
 
   # - name: index_contracts
   #   kind: blockIndex

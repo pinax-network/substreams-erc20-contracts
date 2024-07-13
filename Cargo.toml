@@ -1,6 +1,6 @@
 [package]
 name = "erc20-contracts"
-version = "0.1.6"
+version = "0.1.7"
 description = "ERC-20 Token Contract Info"
 edition = "2021"
 authors = [
