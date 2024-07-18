@@ -58,9 +58,14 @@ $ make gui
 
 ```mermaid
 graph TD;
-graph TD;
+  store_known_contracts[store: store_known_contracts];
+  balance_changes:map_valid_balance_changes --> store_known_contracts;
+  store_known_contracts -- deltas --> index_contracts;
   map_contracts[map: map_contracts];
-  balance_changes:map_valid_balance_changes --> map_contracts;
+  store_known_contracts -- deltas --> map_contracts;
+  graph_out[map: graph_out];
+  sf.substreams.v1.Clock[source: sf.substreams.v1.Clock] --> graph_out;
+  map_contracts --> graph_out;
   db_out[map: db_out];
   sf.substreams.v1.Clock[source: sf.substreams.v1.Clock] --> db_out;
   map_contracts --> db_out;
@@ -68,21 +73,46 @@ graph TD;
 
 ### Modules
 
-Name: map_contracts
-Initial block: 0
-Kind: map
+Name: store_known_contracts
+Initial block: 913198
+Kind: store
 Input: map: balance_changes:map_valid_balance_changes
+Value Type: string
+Update Policy: set_if_not_exists
+Hash: 8ac2282166033a9f121eb98942dc1974ba948fec
+Doc: Stores known contracts
+
+Name: index_contracts
+Initial block: 913198
+Kind: index
+Input: store: store_known_contracts
+Output Type: proto:sf.substreams.index.v1.Keys
+Hash: 481e8077e33f9725b91d57a06582baeb48451496
+
+Name: map*contracts
+Initial block: 913198
+Kind: map
+Input: store: store_known_contracts
+Block Filter: (using \_index_contracts*): `&{contracts}`
 Output Type: proto:erc20.contracts.types.v1.Contracts
-Hash: a8718ac49a4d6eb489f14397667947e6b843b1ad
+Hash: 5def69ded574606c05f04580fe43290eab5eda05
 Doc: Extracts ERC20 token name, symbol and decimals
 
+Name: graph_out
+Initial block: 913198
+Kind: map
+Input: source: sf.substreams.v1.Clock
+Input: map: map_contracts
+Output Type: proto:sf.substreams.sink.entity.v1.EntityChanges
+Hash: dbe5a2a86b5cc116dbdb6433666ce24ab3e6c1b4
+
 Name: db_out
-Initial block: 0
+Initial block: 913198
 Kind: map
 Input: source: sf.substreams.v1.Clock
 Input: map: map_contracts
 Output Type: proto:sf.substreams.sink.database.v1.DatabaseChanges
-Hash: d70a341d44c053f920890c3ba44bfc2312321476
+Hash: 8b7dd497e217476bd3351a1b19f03e15f6dee3a6
 
 ```yaml
 Package name: erc20_contracts

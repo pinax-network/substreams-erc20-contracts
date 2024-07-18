@@ -1,7 +1,7 @@
 specVersion: v0.1.0
 package:
   name: erc20_contracts
-  version: v0.1.8
+  version: v0.1.7
   url: https://github.com/pinax-network/substreams-erc20-contracts
   doc: ERC-20 Token Contract Info
 
@@ -22,6 +22,14 @@ protobuf:
     - ./proto/v1
 
 modules:
+  - name: store_known_contracts
+    kind: store
+    doc: Stores known contracts
+    valueType: string
+    updatePolicy: set_if_not_exists
+    inputs:
+      - map: balance_changes:map_valid_balance_changes
+
   # - name: index_contracts
   #   kind: blockIndex
   #   inputs:
@@ -34,7 +42,8 @@ modules:
     kind: map
     doc: Extracts ERC20 token name, symbol and decimals
     inputs:
-      - map: balance_changes:map_valid_balance_changes
+      - store: store_known_contracts
+        mode: deltas
     #  blockFilter:
     #    module: index_contracts
     #    query:
