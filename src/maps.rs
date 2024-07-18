@@ -3,6 +3,7 @@ use crate::pb::erc20::contracts::types::v1::{Contracts, Contract};
 use substreams::log;
 use substreams::store::{Deltas, DeltaString};
 use substreams::{errors::Error, Hex, scalar::BigInt};
+use crate::pb::erc20::types::v1::ValidBalanceChanges;
 //use substreams::pb::sf::substreams::index::v1::Keys;
 
 /*#[substreams::handlers::map]
@@ -18,28 +19,29 @@ fn index_contracts(store: Deltas<DeltaString>) -> Result<Keys, Error> {
 
 
 #[substreams::handlers::map]
-pub fn map_contracts(store: Deltas<DeltaString>) -> Result<Contracts, Error> {
+pub fn map_contracts(balances: ValidBalanceChanges) -> Result<Contracts, Error> {
    let mut items: Vec<Contract> = Vec::new();
-    for delta in store.deltas{
+
+   for item in balances.valid_balance_changes {
         let mut name = "".to_string();
         let mut symbol = "".to_string();
         let mut decimals= 0;
         
-        match get_contract_name(delta.key.clone()) {
+        match get_contract_name(item.contract.clone()) {
             Some(name_) => {
                 name = name_;
             },
             None => {},
         }
 
-        match get_contract_symbol(delta.key.clone()) {
+        match get_contract_symbol(item.contract.clone()) {
             Some(symbol_) => {
                 symbol = symbol_;
             },
             None => {},
         }
 
-        match get_contract_decimals(delta.key.clone()) {
+        match get_contract_decimals(item.contract.clone()) {
             Some(decimal_) => {
                 let result: i32  =  decimal_.to_u64() as i32;
                 if result < 0 {
@@ -54,7 +56,7 @@ pub fn map_contracts(store: Deltas<DeltaString>) -> Result<Contracts, Error> {
    
         }
 
-            items.push(Contract { address: delta.key, name, symbol, decimals })
+            items.push(Contract { address: item.contract.clone(), name, symbol, decimals })
     }
     Ok(Contracts { items })
 }
